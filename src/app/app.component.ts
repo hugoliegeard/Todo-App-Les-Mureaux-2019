@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import {Task} from './shared/models/task';
+import * as _ from 'lodash';
+import {TaskStorageService} from './shared/services/task-storage.service';
 
 @Component({
   selector: 'app-root',
@@ -8,32 +10,27 @@ import {Task} from './shared/models/task';
 })
 export class AppComponent {
 
-  tasks: Task[] = [
-    {
-      id: 1,
-      title: 'Faire la vaisselle',
-      status: false
-    },
-    {
-      id: 2,
-      title: 'Sortir les Poubelles',
-      status: true
-    },
-    {
-      id: 3,
-      title: 'Aller au Ciné avec ma femme',
-      status: true
-    },
-    {
-      id: 4,
-      title: 'Sortir le chien',
-      status: false
-    },
-    {
-      id: 5,
-      title: 'Faire le ménage',
-      status: false
-    },
-  ];
+  constructor(private taskStorage: TaskStorageService) {
+    this.tasks = this.taskStorage.getTasks();
+  }
 
+  tasks: Task[] = [];
+
+  /**
+   * Supprimer une tâche
+   * du tableau 'tasks'...
+   */
+  removeTask(task: Task) {
+    _.pullAllWith(this.tasks, [task], _.isEqual);
+    this.saveTasks();
+  }
+
+  addTask(task: Task) {
+    this.tasks.push(task);
+    this.saveTasks();
+  }
+
+  saveTasks() {
+    this.taskStorage.save(this.tasks);
+  }
 }

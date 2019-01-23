@@ -1,0 +1,17 @@
+<form #form="ngForm"
+      (ngSubmit)="submitTask(); form.reset();"
+      class="form-inline">
+
+  <input class="form-control mr-sm-2"
+         [class.is-invalid]="form.invalid && form.touched"
+         [(ngModel)]="task.title"
+         name="title" type="search" required
+         placeholder="Ajouter une tâche..."
+         aria-label="Ajouter une tâche...">
+
+  <button [disabled]="form.invalid"
+    class="btn btn-outline-light my-2 my-sm-0"
+    type="submit">Ajouter ma tâche
+  </button>
+
+</form>

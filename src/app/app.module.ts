@@ -3,12 +3,14 @@ import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
 import {FormsModule} from '@angular/forms';
-import { TasksFilterPipe } from './tasks-filter.pipe';
+import { TasksFilterPipe } from './shared/pipes/tasks-filter.pipe';
+import { NewTaskComponent } from './new-task/new-task.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    TasksFilterPipe
+    TasksFilterPipe,
+    NewTaskComponent
   ],
   imports: [
     BrowserModule,

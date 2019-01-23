@@ -3,11 +3,7 @@
   <header>
     <nav class="navbar navbar-dark bg-dark">
       <a href="javascript:void(0)" class="navbar-brand">Mes tâches à faire</a>
-      <form class="form-inline">
-        <input class="form-control mr-sm-2" type="search"
-               placeholder="Ajouter une tâche..." aria-label="Ajouter une tâche...">
-        <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Ajouter</button>
-      </form>
+      <app-new-task (newTaskEvent)="addTask($event)"></app-new-task>
     </nav>
   </header>
 
@@ -18,18 +14,22 @@
         <h2>A Faire</h2>
         <hr>
         <ul id="sortable" class="list-unstyled">
-          <ng-container *ngFor="let task of tasks">
-            <li *ngIf="!task.status"
-                class="ui-state-default">
+          <ng-container *ngFor="let task of tasks | tasksFilter : false">
+            <li class="ui-state-default">
               <label>
                 <input type="checkbox"
                        [(ngModel)]="task.status"
+                       (ngModelChange)="saveTasks()"
                        [checked]="task.status">
                 {{ task.title }}
               </label>
             </li>
           </ng-container>
         </ul>
+        <div class="todo-footer bg-dark text-white">
+          Nombre de tâches restantes :
+          <strong>{{ (tasks | tasksFilter : false).length }}</strong>
+        </div>
       </div>
     </div>
 
@@ -38,14 +38,18 @@
         <h2>Terminées</h2>
         <hr>
         <ul id="done-items" class="list-unstyled">
-          <ng-container *ngFor="let task of tasks">
-            <li *ngIf="task.status">
+          <ng-container *ngFor="let task of tasks | tasksFilter : true">
+            <li>
               <label>
                 <input type="checkbox"
                        [(ngModel)]="task.status"
+                       (ngModelChange)="saveTasks()"
                        [checked]="task.status">
                 {{ task.title }}
               </label>
+              <button (click)="removeTask(task)" class="close">
+                <span>&times;</span>
+              </button>
             </li>
           </ng-container>
         </ul>
